@@ -1,0 +1,204 @@
+\documentclass[runningheads,a4paper]{llncs}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{diagbox}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{array}
+    \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{lipsum}
+\usepackage[super]{natbib}
+\usepackage{setspace}
+\usepackage{tabularx}
+\usepackage{float}
+%\usepackage{fixltx2e}
+
+%define the conditions environment
+\newenvironment{conditions}
+  {\par\setlength{\leftskip}{1cm}\vspace{\abovedisplayskip}\noindent
+   \tabularx{0.9\columnwidth}{>{$}l<{$} @{${}\ =\ {}$} >{\raggedright\arraybackslash}X}}
+  {\endtabularx\par\setlength{\leftskip}{1cm}\vspace{\belowdisplayskip}}
+
+%footnote numbering style - roman == roman numerals
+\renewcommand{\thefootnote}{\roman{footnote}}
+
+\usepackage[textwidth=14cm, centering]{geometry}
+%
+%no hyphenation
+\usepackage[none]{hyphenat}
+\sloppy
+%
+%
+%reference item separation
+\newlength{\bibitemsep}\setlength{\bibitemsep}{.35\baselineskip plus .05\baselineskip minus .05\baselineskip}
+\newlength{\bibparskip}\setlength{\bibparskip}{0pt}
+\let\oldthebibliography\thebibliography
+\renewcommand\thebibliography[1]{%
+  \oldthebibliography{#1}%
+  \setlength{\parskip}{\bibitemsep}%
+  \setlength{\itemsep}{\bibparskip}%
+}
+%
+%bibliography column separation width
+\setlength{\columnsep}{5mm}
+%
+%indentation of the first paragraph
+\usepackage{indentfirst}
+%
+%
+\usepackage[all]{nowidow} % Tries to remove widows
+\usepackage[protrusion=true,expansion=true]{microtype} % Improves typography, load after fontpackage is selected
+%
+%TC:macro \cite [option:1,1]
+%TC:macro \citep [option:1,1]
+%TC:macro \citealt [option:1,1]
+%
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+%
+\title{\textbf{CELL0014 Report 2}}
+\subtitle{Dive into the Repressilator}
+\author{\large{Candidate number: xxx}} %LRMV8
+\institute{\large{University College London}}
+%
+\authorrunning{\textbf{xxx | 06/2021 | Word count: xxx}}
+%
+\begin{document}
+%
+\maketitle% typeset the header of the contribution
+
+\bigskip
+\bigskip
+\onehalfspacing
+%
+\section*{Introduction}
+Traditionally, in biology, we focus on the study of naturally occurring systems - attempting to focus on smaller and smaller still biological mechanisms. Trying to decode and understand the tangled mess of intertwined processes that living organisms are. Yet, an alternative and a rapidly growing field -- synthetic biology -- has a radically different approach --- using man-designed biological systems which do not only present with an unimaginable number of potential applications for the future (much like the rise of 3D-printing is revolutionising the manufacturing industry), but also offer precious insight into what is required to construct robust, reliable, and predictable biological circuits and genetic networks. Nevertheless, designing \textit{de novo} biological systems is no easy feat, requiring a combination of engineering, mathematics, and both \textit{in silico} and \textit{in vivo} biology.
+
+The Goodwin Oscillator, first theoretically described by Brian Goodwin in the 1960s, is regarded as the first and most simple of the \textit{de novo} biological systems and has since been studied and implemented many times\cite{Gonze2013a, Purcell2010a}. It comprises of a single self-repressing gene, which under the correct set of conditions results in oscillatory rises and falls in the concentration of the genes' product. Extending the Goodwin Oscillator are repressilators --- cyclical sets of one or more genes each of which is inhibiting its successor in the set ($1 \dashv 2 \dashv\ ...\ \dashv n \dashv 1$)\cite{Muller2006, Purcell2010a}. The term \textit{Repressilator} was coined by Elowitz and Leibier (2000)\cite{Elowitz2000d} in their influential work describing the first \textit{de novo} oscillatory mechanism \textit{in vivo}. It uses a set of three regulatory genes --- \textit{lacI} from \textit{Escherichia coli} (repressed by cI), \textit{tetR} from the Tn10 transposon (repressed by LacI), and \textit{cI} from the $\lambda$ phage (repressed by TetR; see Fig. \ref{fig:fig1})\cite{Elowitz2000d}. In this document, I attempt to revisit the work of Elowitz and Leibier and verify their claims utilising both deterministic and stochastic modelling. First, however, it is paramount to understand the original design of the Repressilator.
+
+\begin{figure}[H]
+    \singlespacing
+    \centering
+    \includegraphics[width=0.95\textwidth]{fig/Repressilator_plasmid.png}
+    \caption{\textbf{Repressilator Design.} The Repressilator is composed of three regulatory genes,\linebreak \textit{lacI}, \textit{cI}, and \textit{tetR}, under the control of the P\textsubscript{R} promoter with the cI operator, the P\textsubscript{L} promoter with the TetR operator, and the P\textsubscript{L} promoter with the LacI operator, respectively. The genes are terminated with proteolysis targeting tags (as denoted by the "\textit{lite}" suffix). In addition\linebreak to the Repressilator, the system also includes the Reporter carrying the intermediate-stability GFP (\textit{gfp-avv}) under the control of the P\textsubscript{L}tetO1 promoter allowing to monitor the system state with fluorescent microscopy \textit{in vivo}. The plasmids are equipped with the high-copy pSC101 and the low-copy ColE1 \textit{E. coli} replication origins, and ampicillin and kanamycin resistance genes (allowing to select for cell containing only both plasmids), respectively. T1 terminators from\linebreak the \textit{E. coli rrnB} operon used to isolate the individual open reading frames are shown as black boxes. Gene network diagrams are displayed to illustrate the oscillatory negative-feedback loop circuit. Adapted from Elowitz \& Leibier (2000)\cite{Elowitz2000d}.}
+    \label{fig:fig1}
+\end{figure}
+
+\subsection*{The Repressilator}
+\subsubsection*{Mathematical design:}
+Due to the contemporary limited understanding of biochemistry, the team set out to first create a simplistic ordinary differential equation (ODE) model of the biological circuit capturing only the key processes rather than modeling the precise system behaviour. The Repressilator comprises six coupled differential equations:
+
+\vspace{0.3cm}
+\begin{equation*}
+    \displaystyle
+    \begin{aligned}
+        \frac{dm_{i}}{dt}\ =\ -m_{i}+\frac{\alpha}{1+{p_{j}}^{n}}+\alpha_{0} \\[0.5cm]
+        \frac{dp_{i}}{dt}\ =\ -\beta(p_{i}-m_{i})
+    \end{aligned}
+    \hspace{1.2cm}
+    \Bigg(\ 
+        \begin{aligned}
+            i = \textrm{\textit{lacI}, \textit{tetR}, \textit{cI}}    \\
+            j = \textrm{\textit{cI}, \textit{lacI}, \textit{tetR}}
+        \end{aligned}\ 
+    \Bigg)
+\end{equation*}
+
+\pagebreak
+\noindent where:
+
+\begin{conditions}
+    m_{i}               &   mRNA concentration  \\
+    p_{i,j}             &   protein concentration   \\
+    \alpha_{0}          &   promoter "\textit{leakiness}" (number of mRNA molecules transcribed from the promoter under saturating levels of repressor)  \\
+    \alpha+\alpha_{0}   &   number of mRNA molecules transcribed from the promoter produced in the absence of repressor    \\
+    \beta               &   ratio of protein decay rate to mRNA decay rate    \\
+    n                   &   Hill coefficient (describing binding cooperativity);
+\end{conditions}
+
+\noindent all parameters are identical for all three genes, except for their DNA-binding functions; time is rescaled in units of mRNA lifetime; protein concentrations are written in units of K\textsubscript{M} (number of repressor molecules required to reduce the rate of transcription by half); and mRNA concentrations are rescaled by their translation efficiency (average number of proteins produced per mRNA molecule)\cite{Elowitz2000d}. 
+
+After exploring the parameter space (some of which we will engage in later), the authors describe a set of biologically sensible parameters:
+
+\begin{conditions}
+    \alpha_{0}                                  &   $5\times 10^{-4}\ [s^{-1}]$  \\
+    \alpha+\alpha_{0}                           &   $0.5\ [s^{-1}]$    \\
+    \textrm{average translational efficiency}   &   $20\ [\textrm{proteins per transcript}]$  \\
+    n                                           &   $2$   \\
+    \textrm{protein}\ t_{1/2}                   &   $10\ [\textrm{min}]$    \\
+    \textrm{mRNA}\ t_{1/2}                      &   $2\ [\textrm{min}]$, \\
+\end{conditions}
+
+\noindent which result in oscillatory rises and falls of the mRNA and protein concentrations\linebreak (see Fig. \ref{fig:fig2})\cite{Elowitz2000d}.
+
+\begin{figure}
+    \singlespacing
+    \centering
+    \includegraphics[width=0.45\textwidth]{fig/original_oscilations.png}
+    \caption{\textbf{Repressilator protein concentration oscillations.} Color coding as per Fig. \ref{fig:fig1}. Adapted from Elowitz \& Leibier (2000)\cite{Elowitz2000d}.}
+    \label{fig:fig2}
+\end{figure}
+
+Mathematically, the oscillations are associated with a limit cycle and arise via a super-critical Hopf bifurcation for sufficiently high $n$ under the model proposed above\cite{Purcell2010a, Muller2006, Elowitz2000d}. The Hill function, in the context of transcriptional repression, represents the formation of repressor protein complexes or cooperative binding of repressor to the promoter\cite{Gonze2013a}. This sigmoidal function describes the steepness of the repressional response (as discussed below). In another words, sufficiently boolean repression is required for the Repressilator to produce oscillatory behaviour\cite{Purcell2010a}. Additionally, it is also required for a time delay to exist in the negative feedback loop for repressilators to produce oscillations\cite{Purcell2010a,Gonze2020}.
+
+Generally, repressilators were found to favour strong promoters with low leakiness, high translational efficiency, sufficiently nonlinear repression, the presence of a time delay in the system, and similar protein and mRNA decay rates. Additionally, models (including this document) usually assume all genes and their associated parameters to be identical\cite{Purcell2010a}, however, that can be biologically unpractical/unfeasible, and it has been shown that even unsymmetrical repressilator systems can produce oscillations\cite{Strelkowa2010}. Lastly, repressilator systems seem to prefer odd-numbered sets of genes, nevertheless, there is some evidence that oscillating solutions exist even for $6+$ even-numbered sets and it might thus be only two- (which can form stable on/off switches) and four-membered sets of genes that are unable to produce oscillating behaviour\cite{Purcell2010a,Strelkowa2010}.
+
+\subsubsection*{Biological design:} After exploring the circuit design \textit{in silico}, the team set out to create the Repressilator \textit{in vivo}. They resulted to utilising the P\textsubscript{L} promoter  combined with LacI and TetR operator sequences to control the expression of \textit{tetR} and \textit{cI}, respectively, and the P\textsubscript{R} promoter containing the cI operator to control the expression of \textit{lacI} (both promoters originating from the $\lambda$ phage; see Fig. \ref{fig:fig1}) for their strong expression and tight repression\cite{Elowitz2000d}. 
+
+Such constructed reading frames were cloned into a low-copy plasmid and transformed into the \textit{E. coli} MC4100 $\Delta$(argF-lac)U169 strain with the Lac operon disabled to reduce interference between the Repressilator and the \textit{E. coli} metabolism\cite{Elowitz2000d}. Additionally, Elowitz and Leibier also transformed their bacteria with a high-copy plasmid "\textit{Reporter}", which was carrying the intermediate-stability green fluorescent protein variant (\textit{gfp-aav}; with $t_{1/2} \approx 30-40$ min)\cite{Andersen1998} under the control of the P\textsubscript{L}tetO1 to allow for a fluorescent readout of the circuit state (see Fig. \ref{fig:fig1})\cite{Elowitz2000d}. To reduce the relatively high protein half-life to be more comparable with the half-life of mRNA, as required by the model, the team also inserted ssrA tags (making it a target recognised by \textit{E. coli} proteases) at the 3' ends of the genes \cite{Elowitz2000d}.
+
+As mentioned before, at the time of publication, many of the critical parameters were poorly known and thus it was not clear whether the system will indeed oscillate when tested \textit{in vivo}. Conveniently, to the pleasure of the team, at least $40\ \%$ of the cells exhibited oscillatory blinking of green light radiating from the GFP regulated by the Repressilator with peak-to-peak frequency of $160 \pm 40$ min (mean $\pm$ s.d.; notably, roughly threefold longer than the average cell-division time in the experiment)\cite{Elowitz2000d}. Additionally, the team also observed significant noise in the system 
+
+NOISE - stochastic, etc.
+
+\subsubsection*{Future improvements:}
+It is worth mentioning that since its publication in 2000, the design by Elowitz and Leibier has been subject to numerous investigations which yielded much insight into the dynamics of the system. = problems and improvements (gao 2016)
+
+
+
+
+
+
+\section*{Analysis}
+
+\subsection*{Task 1}
+\subsection*{Task 2}
+\subsection*{Task 3}
+\subsection*{Task 4}
+\subsection*{Task 5}
+\subsection*{Task 6}
+
+\section*{Discussion}
+
+
+%
+\clearpage
+% ---- Bibliography ----
+% Find from the left the folder bibliography/ and locate first.bib. you
+% can generate your bibtex references using citepthisforme and paste it inside the first.bib file
+% to citep a bibliography, use \citep{bisht_hinrichs_skrupsky_venkatakrishnan_2014} (example)
+% those are citations embedded to texts
+% please check out https://www.latex-tutorial.com/tutorials/bibtex/
+
+%setting bibliography format
+\newgeometry{centering, textwidth=15.5cm, textheight=20cm} %normal text height is 20 cm
+\singlespacing
+\twocolumn
+%\raggedright
+\raggedbottom
+\interlinepenalty=10000
+%
+\small{\bibliography{ref/library.bib}}
+\bibliographystyle{ref/vancouver2.bst}
+%
+\end{document}
