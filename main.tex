@@ -67,7 +67,6 @@
 %%%%%%%%%%%%%%%%%%
 %
 \title{\textbf{CELL0014 Report 2}}
-\subtitle{Dive into the Repressilator}
 \author{\large{Candidate number: xxx}} %LRMV8
 \institute{\large{University College London}}
 %
@@ -82,15 +81,17 @@
 \onehalfspacing
 %
 \section*{Introduction}
-Traditionally, in biology, we focus on the study of naturally occurring systems - attempting to focus on smaller and smaller still biological mechanisms. Trying to decode and understand the tangled mess of intertwined processes that living organisms are. Yet, an alternative and a rapidly growing field -- synthetic biology -- has a radically different approach --- using man-designed biological systems which do not only present with an unimaginable number of potential applications for the future (much like the rise of 3D-printing is revolutionising the manufacturing industry), but also offer precious insight into what is required to construct robust, reliable, and predictable biological circuits and genetic networks. Nevertheless, designing \textit{de novo} biological systems is no easy feat, requiring a combination of engineering, mathematics, and both \textit{in silico} and \textit{in vivo} biology.
+Traditionally, in biology, we focus on the study of naturally occurring systems - attempting to focus on ever-smaller biological mechanisms; trying to decode and understand the tangled web of intertwined processes that living organisms are. Yet, an alternative and a rapidly growing field -- synthetic biology -- has a radically different approach --- using man-designed biological systems which do not only present with an unimaginable number of potential applications for the future (much like the rise of 3D-printing is revolutionising the manufacturing industry), but also offer precious insight into what is required to construct robust, reliable, and predictable biological circuits and genetic networks. Nevertheless, designing \textit{de novo} biological systems is not a straightforward feat, requiring a combination of engineering, mathematics, and both \textit{in silico} and \textit{in vivo} biology.
 
-The Goodwin Oscillator, first theoretically described by Brian Goodwin in the 1960s, is regarded as the first and most simple of the \textit{de novo} biological systems and has since been studied and implemented many times\cite{Gonze2013a, Purcell2010a}. It comprises of a single self-repressing gene, which under the correct set of conditions results in oscillatory rises and falls in the concentration of the genes' product. Extending the Goodwin Oscillator are repressilators --- cyclical sets of one or more genes each of which is inhibiting its successor in the set ($1 \dashv 2 \dashv\ ...\ \dashv n \dashv 1$)\cite{Muller2006, Purcell2010a}. The term \textit{Repressilator} was coined by Elowitz and Leibier (2000)\cite{Elowitz2000d} in their influential work describing the first \textit{de novo} oscillatory mechanism \textit{in vivo}. It uses a set of three regulatory genes --- \textit{lacI} from \textit{Escherichia coli} (repressed by cI), \textit{tetR} from the Tn10 transposon (repressed by LacI), and \textit{cI} from the $\lambda$ phage (repressed by TetR; see Fig. \ref{fig:fig1})\cite{Elowitz2000d}. In this document, I attempt to revisit the work of Elowitz and Leibier and verify their claims utilising both deterministic and stochastic modelling. First, however, it is paramount to understand the original design of the Repressilator.
+The Goodwin Oscillator, first theoretically described by Brian Goodwin in the 1960s, is regarded as the first and most simple of the \textit{de novo} biological systems and has since been studied and implemented many times\cite{Gonze2013a, Purcell2010a}. It comprises of a single self-repressing gene, which under the correct set of conditions results in oscillatory rises and falls in the concentration of the genes' product. 
+
+Extending the Goodwin Oscillator are repressilators --- cyclical sets of one or more genes each of which is inhibiting its successor in the set ($1 \dashv 2 \dashv\ ...\ \dashv n \dashv 1$)\cite{Muller2006, Purcell2010a}. The term \textit{Repressilator} was coined by Elowitz and Leibier (2000)\cite{Elowitz2000d} in their influential work describing the first \textit{de novo} oscillatory mechanism \textit{in vivo}. It uses a set of three regulatory genes --- \textit{lacI} from \textit{Escherichia coli} (repressed by cI), \textit{tetR} from the Tn10 transposon (repressed by LacI), and \textit{cI} from the Bacteriophage $\lambda$ (repressed by TetR; see Fig. \ref{fig:fig1})\cite{Elowitz2000d}. In this report, I attempt to revisit the work of Elowitz and Leibier and verify their claims utilising both deterministic and stochastic modelling. First, however, it is paramount to understand the original design of the Repressilator.
 
 \begin{figure}[H]
     \singlespacing
     \centering
     \includegraphics[width=0.95\textwidth]{fig/Repressilator_plasmid.png}
-    \caption{\textbf{Repressilator Design.} The Repressilator is composed of three regulatory genes,\linebreak \textit{lacI}, \textit{cI}, and \textit{tetR}, under the control of the P\textsubscript{R} promoter with the cI operator, the P\textsubscript{L} promoter with the TetR operator, and the P\textsubscript{L} promoter with the LacI operator, respectively. The genes are terminated with proteolysis targeting tags (as denoted by the "\textit{lite}" suffix). In addition\linebreak to the Repressilator, the system also includes the Reporter carrying the intermediate-stability GFP (\textit{gfp-avv}) under the control of the P\textsubscript{L}tetO1 promoter allowing to monitor the system state with fluorescent microscopy \textit{in vivo}. The plasmids are equipped with the high-copy pSC101 and the low-copy ColE1 \textit{E. coli} replication origins, and ampicillin and kanamycin resistance genes (allowing to select for cell containing only both plasmids), respectively. T1 terminators from\linebreak the \textit{E. coli rrnB} operon used to isolate the individual open reading frames are shown as black boxes. Gene network diagrams are displayed to illustrate the oscillatory negative-feedback loop circuit. Adapted from Elowitz \& Leibier (2000)\cite{Elowitz2000d}.}
+    \caption{\textbf{Repressilator Design.} The Repressilator is composed of three regulatory genes,\linebreak \textit{lacI}, \textit{cI}, and \textit{tetR}, under the control of the P\textsubscript{R} promoter with the cI operator, the P\textsubscript{L} promoter with the TetR operator, and the P\textsubscript{L} promoter with the LacI operator, respectively. The genes are terminated with proteolysis targeting tags (as denoted by the "\textit{lite}" suffix). In addition\linebreak to the Repressilator, the system also includes the Reporter carrying the intermediate-stability GFP (\textit{gfp-avv}) under the control of the P\textsubscript{L}tetO1 promoter allowing to monitor the system state with fluorescent microscopy \textit{in vivo}. The plasmids are equipped with the low-copy pSC101 and the high-copy ColE1 \textit{E. coli} replication origins, and ampicillin and kanamycin resistance genes (allowing to select for cell containing only both plasmids), respectively. T1 terminators from\linebreak the \textit{E. coli rrnB} operon used to isolate the individual open reading frames are shown as black boxes. Gene network diagrams are displayed to illustrate the oscillatory negative-feedback loop circuit. Adapted from Elowitz \& Leibier (2000)\cite{Elowitz2000d}.}
     \label{fig:fig1}
 \end{figure}
 
@@ -98,7 +99,7 @@ The Goodwin Oscillator, first theoretically described by Brian Goodwin in the 19
 \subsubsection*{Mathematical design:}
 Due to the contemporary limited understanding of biochemistry, the team set out to first create a simplistic ordinary differential equation (ODE) model of the biological circuit capturing only the key processes rather than modeling the precise system behaviour. The Repressilator comprises six coupled differential equations:
 
-\vspace{0.3cm}
+\vspace{\abovedisplayskip}
 \begin{equation*}
     \displaystyle
     \begin{aligned}
@@ -111,7 +112,7 @@ Due to the contemporary limited understanding of biochemistry, the team set out 
             i = \textrm{\textit{lacI}, \textit{tetR}, \textit{cI}}    \\
             j = \textrm{\textit{cI}, \textit{lacI}, \textit{tetR}}
         \end{aligned}\ 
-    \Bigg)
+    \Bigg)_\textrm{\large{,}}
 \end{equation*}
 
 \pagebreak
@@ -128,7 +129,7 @@ Due to the contemporary limited understanding of biochemistry, the team set out 
 
 \noindent all parameters are identical for all three genes, except for their DNA-binding functions; time is rescaled in units of mRNA lifetime; protein concentrations are written in units of K\textsubscript{M} (number of repressor molecules required to reduce the rate of transcription by half); and mRNA concentrations are rescaled by their translation efficiency (average number of proteins produced per mRNA molecule)\cite{Elowitz2000d}. 
 
-After exploring the parameter space (some of which we will engage in later), the authors describe a set of biologically sensible parameters:
+After exploring the parameter space (some of which I will engage in below), the authors describe a set of biologically sensible parameters:
 
 \begin{conditions}
     \alpha_{0}                                  &   $5\times 10^{-4}\ [s^{-1}]$  \\
@@ -149,29 +150,88 @@ After exploring the parameter space (some of which we will engage in later), the
     \label{fig:fig2}
 \end{figure}
 
-Mathematically, the oscillations are associated with a limit cycle and arise via a super-critical Hopf bifurcation for sufficiently high $n$ under the model proposed above\cite{Purcell2010a, Muller2006, Elowitz2000d}. The Hill function, in the context of transcriptional repression, represents the formation of repressor protein complexes or cooperative binding of repressor to the promoter\cite{Gonze2013a}. This sigmoidal function describes the steepness of the repressional response (as discussed below). In another words, sufficiently boolean repression is required for the Repressilator to produce oscillatory behaviour\cite{Purcell2010a}. Additionally, it is also required for a time delay to exist in the negative feedback loop for repressilators to produce oscillations\cite{Purcell2010a,Gonze2020}.
+Mathematically, the oscillations are associated with a limit cycle and arise via a super-critical Hopf bifurcation for sufficiently high $n$ under the model proposed above\cite{Purcell2010a, Muller2006, Elowitz2000d}. The Hill function, in the context of transcriptional repression, represents the formation of repressor protein complexes or cooperative binding of repressor to the promoter\cite{Gonze2013a}. This sigmoidal function describes the steepness of the repressional response (as discussed below). In other words, sufficiently boolean repression is required for the Repressilator to produce oscillatory behaviour\cite{Purcell2010a}. Additionally, it is also required for a time delay to exist in the negative feedback loop for repressilators to produce oscillations\cite{Purcell2010a,Gonze2020}.
 
 Generally, repressilators were found to favour strong promoters with low leakiness, high translational efficiency, sufficiently nonlinear repression, the presence of a time delay in the system, and similar protein and mRNA decay rates. Additionally, models (including this document) usually assume all genes and their associated parameters to be identical\cite{Purcell2010a}, however, that can be biologically unpractical/unfeasible, and it has been shown that even unsymmetrical repressilator systems can produce oscillations\cite{Strelkowa2010}. Lastly, repressilator systems seem to prefer odd-numbered sets of genes, nevertheless, there is some evidence that oscillating solutions exist even for $6+$ even-numbered sets and it might thus be only two- (which can form stable on/off switches) and four-membered sets of genes that are unable to produce oscillating behaviour\cite{Purcell2010a,Strelkowa2010}.
 
-\subsubsection*{Biological design:} After exploring the circuit design \textit{in silico}, the team set out to create the Repressilator \textit{in vivo}. They resulted to utilising the P\textsubscript{L} promoter  combined with LacI and TetR operator sequences to control the expression of \textit{tetR} and \textit{cI}, respectively, and the P\textsubscript{R} promoter containing the cI operator to control the expression of \textit{lacI} (both promoters originating from the $\lambda$ phage; see Fig. \ref{fig:fig1}) for their strong expression and tight repression\cite{Elowitz2000d}. 
+\subsubsection*{Biological design:} 
+After exploring the circuit design \textit{in silico}, the team set out to create the Repressilator \textit{in vivo}. They resulted to utilising the P\textsubscript{L} promoter  combined with LacI and TetR operator sequences to control the expression of \textit{tetR} and \textit{cI}, respectively, and the P\textsubscript{R} promoter containing the cI operator to control the expression of \textit{lacI} (both promoters originating from the Bacteriophage $\lambda$; see Fig. \ref{fig:fig1}) for their strong expression and tight repression\cite{Elowitz2000d}. 
 
 Such constructed reading frames were cloned into a low-copy plasmid and transformed into the \textit{E. coli} MC4100 $\Delta$(argF-lac)U169 strain with the Lac operon disabled to reduce interference between the Repressilator and the \textit{E. coli} metabolism\cite{Elowitz2000d}. Additionally, Elowitz and Leibier also transformed their bacteria with a high-copy plasmid "\textit{Reporter}", which was carrying the intermediate-stability green fluorescent protein variant (\textit{gfp-aav}; with $t_{1/2} \approx 30-40$ min)\cite{Andersen1998} under the control of the P\textsubscript{L}tetO1 to allow for a fluorescent readout of the circuit state (see Fig. \ref{fig:fig1})\cite{Elowitz2000d}. To reduce the relatively high protein half-life to be more comparable with the half-life of mRNA, as required by the model, the team also inserted ssrA tags (making it a target recognised by \textit{E. coli} proteases) at the 3' ends of the genes \cite{Elowitz2000d}.
 
-As mentioned before, at the time of publication, many of the critical parameters were poorly known and thus it was not clear whether the system will indeed oscillate when tested \textit{in vivo}. Conveniently, to the pleasure of the team, at least $40\ \%$ of the cells exhibited oscillatory blinking of green light radiating from the GFP regulated by the Repressilator with peak-to-peak frequency of $160 \pm 40$ min (mean $\pm$ s.d.; notably, roughly threefold longer than the average cell-division time in the experiment)\cite{Elowitz2000d}. Additionally, the team also observed significant noise in the system 
+As mentioned before, at the time of publication, many of the critical parameters were poorly known and thus it was not clear whether the system will indeed oscillate when tested \textit{in vivo}. Conveniently, to the pleasure of the team, at least $40\ \%$ of the cells exhibited oscillatory blinking of green light radiating from the GFP regulated by the Repressilator with peak-to-peak frequency of $160 \pm 40$ min (mean $\pm$ s.d.; notably, roughly threefold longer than the average cell-division time in the experiment)\cite{Elowitz2000d}. 
 
-NOISE - stochastic, etc.
+Additionally, the team also observed significant noise in the oscillatory behaviour, both, in-between mother-daughter and daughter-daughter cells with cells skipping and delaying oscillations\cite{Elowitz2000d}. Even though it was later shown that this erraticity was to a certain extent caused by the limited imaging technology available at the time\cite{Potvin-Trottier2016a}, this chaotic behaviour can to a large degree be accounted to the inherent randomness and stochasticity of living organisms and the universe. For that reason, the researchers also explored a stochastic simulation of the Repressilator using the Gillespie algorithm (some of which I do myself later in this report) showing that the modelled system behaved not dissimilarly to the \textit{in vivo} observations\cite{Elowitz2000d}.
 
 \subsubsection*{Future improvements:}
-It is worth mentioning that since its publication in 2000, the design by Elowitz and Leibier has been subject to numerous investigations which yielded much insight into the dynamics of the system. = problems and improvements (gao 2016)
+It is worth mentioning that since its publication in 2000, the design by Elowitz and Leibier has been subject to numerous investigations which yielded much insight into the dynamics of the system\cite{Purcell2010a}. Most notably, recent study by Potvin-Trottier \textit{et al.} (2016)\cite{Potvin-Trottier2016a}\linebreak where the team set out to minimise noise in the original Repressilator - with great success. Instead of adding extra redundant or regulatory mechanisms to the Repressilator, the team focused on achieving the best performace with the most minimalistic design possible.
 
+Firstly, they showed that poor segregation of the high-copy Reporter caused significant fluctuations in the mother-daughter levels of GFP and just moving P\textsubscript{L}tetO1 \textit{gfp-aav} onto the more stable low-copy Repressilator alone lowered the fluorescence amplitude standard deviation from the original $78\ \%$ to $36\ \%$\cite{Potvin-Trottier2016a}. 
 
+Secondly, the team described another significant source of noise - the \textit{E. coli} protein degradation machinery, which can be over-saturated when both the intermediate-stability GFP and the reporter proteins are being targeted for degradation via the ssrA-tags\cite{Potvin-Trottier2016a}. And while it extended the period from 2.4 to 5.7 generations, removing the ssrA-tags from the reporter genes (or lowering the number of gene copies), it strongly improved the accuracy of oscillations allowing the experiment to run for 5.5 cell-cycles before accumulating 0.5 period of drift\cite{Potvin-Trottier2016a}.
 
+Lastly, Potvin-Trottier \textit{et al.} also showed that, the strength of TetR's repression is so high, that even an extremely low number of it's molecules can terminate promoter transcription, which subjects it's regulation under a large amount of stochastic noise. Increasing TetR's repression threshold, by adding additional "soaker" binding sites, greatly reduced the noise all steps in the circuit\cite{Potvin-Trottier2016a}. Such repressor titration could be a very useful and important tool for tuning synthetic networks to specific behaviour or for designing very precise switches.
 
-
+Repressilator modified in this fashion was able to reliably display 14-generation periods (with the above-described accuracy) under a wide range of conditions, showing that the ability to carefully tweak biochemical parameters and a deep understanding of the stochastic nature of the relevant biochemical processes can produce astonishingly precise and predictable fashion even in such primitive circuit\cite{Potvin-Trottier2016a}.
 
 \section*{Analysis}
+Alongside discussing the Repressilator's design and relevance, this document also aims to revisit the original work by Elowitz and Leibier\cite{Elowitz2000d} and reconfirm their claims and provide additional insight into the system's behaviour.
 
+Expanding the original ODEs, we arrive at set of equations:
+
+\vspace{0.5\abovedisplayskip}
+\begin{equation*}
+    \begin{aligned}
+        {m_{i}}^{+}(t+1)\ =\ k_{m}\frac{K^{n}}{K^{n}+{P_{j}(t)}^{n}}+{k_{m}}_{0} \\[0.2cm]
+        {P_{i}}^{+}(t+1)\ =\ k_{p}*{m_{i}(t)} \\[0.4cm]
+        {m_{i}}^{-}(t+1)\ =\ k_{dm}*{m_{i}(t)} \\[0.2cm]
+        {P_{i}}^{-}(t+1)\ =\ k_{dp}*{P_{i}(t)} \\[0.6cm]
+        m_{i}(t+1)\ =\ {m_{i}}^{+}(t+1) - {m_{i}}^{-}(t+1) \\[0.2cm]
+        P_{i}(t+1)\ =\ {P_{i}}^{+}(t+1) - {P_{i}}^{-}(t+1)
+    \end{aligned}
+    \hspace{0.8cm}
+    \Bigg(\ 
+        \begin{aligned}
+            i = \textrm{\textit{lacI}, \textit{tetR}, \textit{cI}}    \\
+            j = \textrm{\textit{cI}, \textit{lacI}, \textit{tetR}}
+        \end{aligned}\ 
+    \Bigg)_\textrm{\large{,}}
+\end{equation*}
+    
+\noindent where\footnote{All parameter values have been converted from the original Repressilator parameters described above (see Supplementary Information for detailed calculations).}:
+
+\begin{conditions}
+    t   &   time [min]    \\
+    K   &   $40$ (repression K\textsubscript{M}, number of repressor molecules required to reduce expression by $50\ \%$)    \\
+    n   &   $2$ (Hill coefficient)  \\
+    P_{i,j}   &   number of protein molecules \\
+    m_{i}   &   number of mRNA molecules\\
+    k_{m}   &   $30\ [\textrm{min}^{-1}]$ (maximum rate of transcription, $\alpha + \alpha_{0}$)    \\
+    {k_{m}}_{0}  &   $0.03\ [\textrm{min}^{-1}]$ (promoter ”leakiness”, $\alpha_{0}$)  \\
+    k_{dm}   &   $0.3466\ [\textrm{min}^{-1}]$ (rate of mRNA decay)    \\
+    k_{dp}   &   $0.06931\ [\textrm{min}^{-1}]$ (rate of protein decay),  \\
+\end{conditions}
+
+\noindent assuming saturated transcription and translation, which can be used to model the mRNA and protein levels across time. In the chapters below, I discussed how I used these equations implemented in Python to study the Repressilator system. All code used to conduct this analysis is attached as part of the Supplementary Information.
+
+\clearpage
 \subsection*{Task 1}
+Firstly, let us consider a simplified scenario with only two genes out of the three regulatory genes -- \textit{lacI} and \textit{tetR}:
+
+\begin{equation*}
+    P_{lacI} \dashv P_{tetR}
+\end{equation*}
+
+\noindent where we are concerned only with two out of the six ODEs describing the Repressilator ($m_{i}\ \&\ P_{i};\ i\ =\ \textrm{\textit{tetR}},\ j\ =\ \textrm{\textit{lacI}}$). Assuming constant levels of LacI, we can examine the steady-state (once the system has reached it) concentration of TetR under different parameters --- namely, the Hill coefficient.
+
+\begin{figure}
+    \singlespacing
+    \centering
+    \includegraphics[width=0.75\textwidth]{suplementary_information_and_code/Task1_figure1.png}
+    \caption{\textbf{Characteristics of repression kinetics.} }
+    \label{fig:fig3}
+\end{figure}
+
 \subsection*{Task 2}
 \subsection*{Task 3}
 \subsection*{Task 4}
@@ -194,7 +254,7 @@ It is worth mentioning that since its publication in 2000, the design by Elowitz
 \newgeometry{centering, textwidth=15.5cm, textheight=20cm} %normal text height is 20 cm
 \singlespacing
 \twocolumn
-%\raggedright
+\raggedright
 \raggedbottom
 \interlinepenalty=10000
 %
