@@ -1,6 +1,7 @@
 \documentclass[runningheads,a4paper]{llncs}
 \usepackage{graphicx}
 \usepackage{listings}
+\usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{diagbox}
 \usepackage{subcaption}
@@ -179,15 +180,16 @@ Alongside discussing the Repressilator's design and relevance, this document als
 
 Expanding the original ODEs, we arrive at set of equations:
 
-\vspace{0.5\abovedisplayskip}
 \begin{equation*}
     \begin{aligned}
-        {m_{i}}^{+}(t+1)\ =\ k_{m}\frac{K^{n}}{K^{n}+{P_{j}(t)}^{n}}+{k_{m}}_{0} \\[0.2cm]
-        {P_{i}}^{+}(t+1)\ =\ k_{p}*{m_{i}(t)} \\[0.4cm]
-        {m_{i}}^{-}(t+1)\ =\ k_{dm}*{m_{i}(t)} \\[0.2cm]
-        {P_{i}}^{-}(t+1)\ =\ k_{dp}*{P_{i}(t)} \\[0.6cm]
-        m_{i}(t+1)\ =\ {m_{i}}^{+}(t+1) - {m_{i}}^{-}(t+1) \\[0.2cm]
-        P_{i}(t+1)\ =\ {P_{i}}^{+}(t+1) - {P_{i}}^{-}(t+1)
+        \Delta^{+}m_{i}({\scriptstyle t,\ t+1})\ =\ k_{m}\frac{K^{n}}{K^{n}+{P_{j}({\scriptstyle t})}^{n}}+{k_{m}}_{0} \\[0.1cm]
+        \Delta^{+}P_{i}({\scriptstyle t,\ t+1})\ =\ k_{p}*{m_{i}({\scriptstyle t})} \\[0.2cm]
+        \Delta^{-}m_{i}({\scriptstyle t,\ t+1})\ =\ k_{dm}*{m_{i}({\scriptstyle t})} \\[0.1cm]
+        \Delta^{-}P_{i}({\scriptstyle t,\ t+1})\ =\ k_{dp}*{P_{i}({\scriptstyle t})} \\[0.3cm]
+        \Delta m_{i}({\scriptstyle t,\ t+1})\ =\ \Delta^{+}m_{i}({\scriptstyle t,\ t+1}) - \Delta^{-}m_{i}({\scriptstyle t,\ t+1} \\[0.1cm]
+        \Delta P_{i}({\scriptstyle t,\ t+1})\ =\ \Delta^{+}P_{i}({\scriptstyle t,\ t+1}) - \Delta^{-}P_{i}({\scriptstyle t,\ t+1}) \\[0.3cm]
+        m_{i}({\scriptstyle t+1})\ =\ m_{i}({\scriptstyle t}) + \Delta m_{i}({\scriptstyle t,\ t+1}) \\[0.1cm]
+        P_{i}({\scriptstyle t+1})\ =\ P_{i}({\scriptstyle t}) + \Delta P_{i}({\scriptstyle t,\ t+1})
     \end{aligned}
     \hspace{0.8cm}
     \Bigg(\ 
@@ -204,10 +206,11 @@ Expanding the original ODEs, we arrive at set of equations:
     t   &   time [min]    \\
     K   &   $40$ (repression K\textsubscript{M}, number of repressor molecules required to reduce expression by $50\ \%$)    \\
     n   &   $2$ (Hill coefficient)  \\
-    P_{i,j}   &   number of protein molecules \\
-    m_{i}   &   number of mRNA molecules\\
-    k_{m}   &   $30\ [\textrm{min}^{-1}]$ (maximum rate of transcription, $\alpha + \alpha_{0}$)    \\
-    {k_{m}}_{0}  &   $0.03\ [\textrm{min}^{-1}]$ (promoter ”leakiness”, $\alpha_{0}$)  \\
+    P_{i,j}({\scriptstyle t})   &   number of protein molecules at time $t$\\
+    m_{i}({\scriptstyle t})   &   number of mRNA molecules at time $t$\\
+    k_{m}   &   $30\ [\textrm{min}^{-1}]$ (maximum rate of transcription; $\alpha + \alpha_{0}$)    \\
+    {k_{m}}_{0}  &   $0.03\ [\textrm{min}^{-1}]$ (promoter ”leakiness; $\alpha_{0}$)  \\
+    k_{p}   &   $6.931\ [\textrm{min}^{-1}]$ (translational efficiency) \\    
     k_{dm}   &   $0.3466\ [\textrm{min}^{-1}]$ (rate of mRNA decay)    \\
     k_{dp}   &   $0.06931\ [\textrm{min}^{-1}]$ (rate of protein decay),  \\
 \end{conditions}
@@ -219,20 +222,32 @@ Expanding the original ODEs, we arrive at set of equations:
 Firstly, let us consider a simplified scenario with only two genes out of the three regulatory genes -- \textit{lacI} and \textit{tetR}:
 
 \begin{equation*}
-    P_{lacI} \dashv P_{tetR}
+    P_{\textrm{lacI}} \dashv P_{\textrm{tetR}}
 \end{equation*}
 
-\noindent where we are concerned only with two out of the six ODEs describing the Repressilator ($m_{i}\ \&\ P_{i};\ i\ =\ \textrm{\textit{tetR}},\ j\ =\ \textrm{\textit{lacI}}$). Assuming constant levels of LacI, we can examine the steady-state (once the system has reached it) concentration of TetR under different parameters --- namely, the Hill coefficient.
+\noindent where we are concerned only with two out of the six ODEs describing the Repressilator ($m_{i}\ \&\ P_{i};\ i\ =\ \textrm{\textit{tetR}},\ j\ =\ \textrm{\textit{lacI}}$). Assuming constant levels of LacI, we can examine the steady-state (once the system has reached it; $t_{\textrm{\tiny MAX}}=1000\ [\textrm{min}]$) concentration of TetR under different parameters --- namely, the Hill coefficient. This will allow us to see how different levels of cooperativity affect the repression kinetics between LacI and TetR under the model described above\footnote{Initial conditions: $m_{\textrm{\textit{tetR}}}({\scriptstyle t=0}) =\ 0$, $P_{\textrm{TetR}}({\scriptstyle t=0}) =\ 5$} (see Fig. \ref{fig:fig3}). 
 
 \begin{figure}
     \singlespacing
     \centering
     \includegraphics[width=0.75\textwidth]{suplementary_information_and_code/Task1_figure1.png}
-    \caption{\textbf{Characteristics of repression kinetics.} }
+    \caption{\textbf{Characteristics of repression kinetics in the isolated system of $P_{\textrm{lacI}} \dashv P_{\textrm{tetR}}$.} With growing $n$ (Hill coefficient), repression of TetR production by LacI becomes more sigmoidal and boolean. Sufficiently high $n$ ($\gtrapprox 1.64$; data not shown) is required to produce a Hopf bifurcation and for the system to oscillate. All curves converge at LacI $= 40$ ($K$; concentration of LacI required to reduce \textit{tetR} expression by $50 \%$).}
     \label{fig:fig3}
 \end{figure}
 
+I have tested $n$ ranging from 0.5 (negative cooperativity), 1.0 (no cooperativity), to 8.0 (high positive cooperativity) --- a biologically relevant range (in the context of transcriptional repression, it is almost impossible to reach Hill coefficients over 4\cite{Gonze2013a}). In the simulation we can observe that with the Hill coefficient increasing, the repression curve of $P_{\textrm{lacI}} \dashv P_{\textrm{tetR}}$ grows steeper - decreasing the number of molecules required to switch the gene expression state (while $K$ stays fixed). Biologically, this behaviour could be explained either by repressor protein multimerisation (increasing the affinity of biding to the operator, or by cooperative binding (where repressor protein binding to the operator increases the binding affinity for other repressor molecules\cite{Gonze2013a}.
+
 \subsection*{Task 2}
+Now, let us consider the full Repressilator circuit as described above\footnote{Initial conditions (used throughout the analysis, unless stated otherwise): $m_{\textrm{\textit{lacI}}}({\scriptstyle t=0}) =\ 0$, $m_{\textrm{\textit{tetR}}}({\scriptstyle t=0}) =\ 0$, $m_{\textrm{\textit{cI}}}({\scriptstyle t=0}) =\ 0$, $P_{\textrm{LacI}}({\scriptstyle t=0}) =\ 0$, $P_{\textrm{TetR}}({\scriptstyle t=0}) =\ 5$, and $P_{\textrm{cI}}({\scriptstyle t=0}) =\ 0$}. When simulated for $1000\ \textrm{min}$, the system exhibited stable and indefinite (as they are associated with a limit cycle; see below) oscillatory rises and falls in the regulatory-proteins' concentrations consistent with the results reported by Elowitz and Leibier in 2000\cite{Elowitz2000d} (see Fig. \ref{fig:fig2} and Fig. \ref{fig:fig4}).
+
+\begin{figure}
+    \singlespacing
+    \centering
+    \includegraphics[width=0.75\textwidth]{suplementary_information_and_code/Task2_figure1.png}
+    \caption{\textbf{Repressilator ODE simulation results.}}
+    \label{fig:fig4}
+\end{figure}
+
 \subsection*{Task 3}
 \subsection*{Task 4}
 \subsection*{Task 5}
