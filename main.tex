@@ -15,6 +15,7 @@
 \usepackage{setspace}
 \usepackage{tabularx}
 \usepackage{float}
+\usepackage{xcolor}
 %\usepackage{fixltx2e}
 
 %define the conditions environment
@@ -182,12 +183,12 @@ Expanding the original ODEs, we arrive at set of equations:
 
 \begin{equation*}
     \begin{aligned}
-        \Delta^{+}m_{i}({\scriptstyle t,\ t+1})\ =\ k_{m}\frac{K^{n}}{K^{n}+{P_{j}({\scriptstyle t})}^{n}}+{k_{m}}_{0} \\[0.1cm]
-        \Delta^{+}P_{i}({\scriptstyle t,\ t+1})\ =\ k_{p}*{m_{i}({\scriptstyle t})} \\[0.2cm]
-        \Delta^{-}m_{i}({\scriptstyle t,\ t+1})\ =\ k_{dm}*{m_{i}({\scriptstyle t})} \\[0.1cm]
-        \Delta^{-}P_{i}({\scriptstyle t,\ t+1})\ =\ k_{dp}*{P_{i}({\scriptstyle t})} \\[0.3cm]
-        \Delta m_{i}({\scriptstyle t,\ t+1})\ =\ \Delta^{+}m_{i}({\scriptstyle t,\ t+1}) - \Delta^{-}m_{i}({\scriptstyle t,\ t+1} \\[0.1cm]
-        \Delta P_{i}({\scriptstyle t,\ t+1})\ =\ \Delta^{+}P_{i}({\scriptstyle t,\ t+1}) - \Delta^{-}P_{i}({\scriptstyle t,\ t+1}) \\[0.3cm]
+        \partial^{+}m_{i}({\scriptstyle t,\ t+1})\ =\ k_{m}\frac{K^{n}}{K^{n}+{P_{j}({\scriptstyle t})}^{n}}+{k_{m}}_{0} \\[0.1cm]
+        \partial^{+}P_{i}({\scriptstyle t,\ t+1})\ =\ k_{p}*{m_{i}({\scriptstyle t})} \\[0.2cm]
+        \partial^{-}m_{i}({\scriptstyle t,\ t+1})\ =\ k_{dm}*{m_{i}({\scriptstyle t})} \\[0.1cm]
+        \partial^{-}P_{i}({\scriptstyle t,\ t+1})\ =\ k_{dp}*{P_{i}({\scriptstyle t})} \\[0.3cm]
+        \Delta m_{i}({\scriptstyle t,\ t+1})\ =\ \partial^{+}m_{i}({\scriptstyle t,\ t+1})\ -\ \partial^{-}m_{i}({\scriptstyle t,\ t+1}) \\[0.1cm]
+        \Delta P_{i}({\scriptstyle t,\ t+1})\ =\ \partial^{+}P_{i}({\scriptstyle t,\ t+1})\ -\ \partial^{-}P_{i}({\scriptstyle t,\ t+1}) \\[0.3cm]
         m_{i}({\scriptstyle t+1})\ =\ m_{i}({\scriptstyle t}) + \Delta m_{i}({\scriptstyle t,\ t+1}) \\[0.1cm]
         P_{i}({\scriptstyle t+1})\ =\ P_{i}({\scriptstyle t}) + \Delta P_{i}({\scriptstyle t,\ t+1})
     \end{aligned}
@@ -231,15 +232,16 @@ Firstly, let us consider a simplified scenario with only two genes out of the th
     \singlespacing
     \centering
     \includegraphics[width=0.75\textwidth]{suplementary_information_and_code/Task1_figure1.png}
-    \caption{\textbf{Characteristics of repression kinetics in the isolated system of $P_{\textrm{lacI}} \dashv P_{\textrm{tetR}}$.} With growing $n$ (Hill coefficient), repression of TetR production by LacI becomes more sigmoidal and boolean. Sufficiently high $n$ ($\gtrapprox 1.64$; data not shown) is required to produce a Hopf bifurcation and for the system to oscillate. All curves converge at LacI $= 40$ ($K$; concentration of LacI required to reduce \textit{tetR} expression by $50 \%$).}
+    \caption{\textbf{Characteristics of repression kinetics in the isolated system of $P_{\textrm{lacI}} \dashv P_{\textrm{tetR}}$.} With growing $n$ (Hill coefficient), repression of TetR production by LacI becomes more sigmoidal and boolean. Sufficiently high $n$ ($\gtrapprox 1.64$; see Fig. \ref{fig:fig9}) is required to produce a Hopf bifurcation and for the system to oscillate. All curves converge at LacI $= 40$ ($K$; concentration of LacI required to reduce \textit{tetR} expression by $50 \%$).}
     \label{fig:fig3}
 \end{figure}
 
 I have tested $n$ ranging from 0.5 (negative cooperativity), 1.0 (no cooperativity), to 8.0 (high positive cooperativity) --- a biologically relevant range (in the context of transcriptional repression, it is almost impossible to reach Hill coefficients over 4\cite{Gonze2013a}). In the simulation we can observe that with the Hill coefficient increasing, the repression curve of $P_{\textrm{lacI}} \dashv P_{\textrm{tetR}}$ grows steeper - decreasing the number of molecules required to switch the gene expression state (while $K$ stays fixed). Biologically, this behaviour could be explained either by repressor protein multimerisation (increasing the affinity of biding to the operator, or by cooperative binding (where repressor protein binding to the operator increases the binding affinity for other repressor molecules\cite{Gonze2013a}.
 
 \subsection*{Task 2}
-Now, let us consider the full Repressilator circuit as described above\footnote{Initial conditions (used throughout the analysis, unless stated otherwise): $m_{\textrm{\textit{lacI}}}({\scriptstyle t=0}) =\ 0$, $m_{\textrm{\textit{tetR}}}({\scriptstyle t=0}) =\ 0$, $m_{\textrm{\textit{cI}}}({\scriptstyle t=0}) =\ 0$, $P_{\textrm{LacI}}({\scriptstyle t=0}) =\ 0$, $P_{\textrm{TetR}}({\scriptstyle t=0}) =\ 5$, and $P_{\textrm{cI}}({\scriptstyle t=0}) =\ 0$}. When simulated for $1000\ \textrm{min}$, the system exhibited stable and indefinite (as they are associated with a limit cycle; see below) oscillatory rises and falls in the regulatory-proteins' concentrations consistent with the results reported by Elowitz and Leibier in 2000\cite{Elowitz2000d} (see Fig. \ref{fig:fig2} and Fig. \ref{fig:fig4}).
+Now, let us consider the full Repressilator circuit as described above\footnote{Initial conditions (used throughout the analysis, unless stated otherwise): $m_{\textrm{\textit{lacI}}}({\scriptstyle t=0}) =\ 0$, $m_{\textrm{\textit{tetR}}}({\scriptstyle t=0}) =\ 0$, $m_{\textrm{\textit{cI}}}({\scriptstyle t=0}) =\ 0$, $P_{\textrm{LacI}}({\scriptstyle t=0}) =\ 0$, $P_{\textrm{TetR}}({\scriptstyle t=0}) =\ 5$, and $P_{\textrm{cI}}({\scriptstyle t=0}) =\ 0$}. When simulated for $1000\ \textrm{min}$, the system exhibited stable and indefinite (as they are associated with a limit cycle; see below) oscillatory rises and falls in the regulatory-proteins' concentrations consistent with the results reported by Elowitz and Leibier in 2000 (see Fig. \ref{fig:fig2} and Fig. \ref{fig:fig4})\cite{Elowitz2000d}.
 
+\vspace{-3\abovedisplayskip}
 \begin{figure}
     \singlespacing
     \centering
@@ -248,8 +250,77 @@ Now, let us consider the full Repressilator circuit as described above\footnote{
     \label{fig:fig4}
 \end{figure}
 
+In addition to the limit cycle oscillations, the system can also enter a steady state as per the assumption that all gene parameters are identical. This steady state arises when the initial conditions for all three genes are also identical ($P_{\textrm{LacI}}({\scriptstyle t=0}) = P_{\textrm{TetR}}({\scriptstyle t=0}) = P_{\textrm{cI}}({\scriptstyle t=0})\ \wedge\ m_{\textrm{\textit{lacI}}}({\scriptstyle t=0}) = m_{\textrm{\textit{tetR}}}({\scriptstyle t=0}) = m_{\textrm{\textit{cI}}}({\scriptstyle t=0})$) as shown in Fig. \ref{fig:fig5}. However, should even only a minuscule difference exist between the three sets of initial conditions (for each gene) exist, the system will eventually reach the limit cycle and produce oscillations as shown in Fig. \ref{fig:fig6}.
+
+\begin{figure}
+    \singlespacing
+    \centering
+    \includegraphics[width=0.70\textwidth]{suplementary_information_and_code/Task2_figure2.png}
+    \caption{\textbf{Repressilator ODE simulation of steady-state.} Instead of producing oscillations, the system enters a steady state ($P_{\textrm{\tiny ALL}} \approxeq 240\ [\textrm{molecules}]$) when the initial conditions for all three genes are identical. Note that only the curve representing the cI concentration is visible, as all plotted concentrations are identical and overlap. Initial conditions: $m_{\textrm{\textit{lacI}}}({\scriptstyle t=0}) =\ 0$, $m_{\textrm{\textit{tetR}}}({\scriptstyle t=0}) =\ 0$, $m_{\textrm{\textit{cI}}}({\scriptstyle t=0}) =\ 0$, $P_{\textrm{LacI}}({\scriptstyle t=0}) =\ 5$, $P_{\textrm{TetR}}({\scriptstyle t=0}) =\ 5$, and $P_{\textrm{cI}}({\scriptstyle t=0}) =\ 5$. Colour coding as per Fig. \ref{fig:fig1}.}  
+    \label{fig:fig5}
+\end{figure}
+
+\begin{figure}
+    \singlespacing
+    \centering
+    \includegraphics[width=0.95\textwidth]{suplementary_information_and_code/Task2_figure3.png}
+    \caption{\textbf{Repressilator ODE Phase plot.} This plot is showing the relation of TetR and LacI concentrations, nevertheless, the system comprises of 3 genes. To be able to completely understand the system behaviour, a 3D representation is required (See Supplementary Information). \textbf{(\textit{a})} Repressilator simulations ($t_{\textrm{\tiny MAX}}=1000\ \textrm{min} $) with different starting protein concentrations are shown (all mRNA concentrations $= 0$). Regardless the starting conditions (unless they are on the limit cycle), the system will promptly colapse close near the steady state and, unless started with all concentrations identical (in which case the system will enter the steady state), the system will start approaching the limit cycle. The steady state simulation is shown in red; its linear trajectory represents the system behaviour in Fig. \ref{fig:fig5} where the protein concentrations reach the steady state after a short period of transient rise and fall, with all concentrations being identical. \textbf{(\textit{b})} Showing simulations as in \textit{\textbf{a}}, but cropped to better show the steady state a identical simulation approaches to the limit cycle. \textbf{(\textit{c})} Showing simulations as in \textit{\textbf{a}} with the initial transient behaviour (first $800\ \textrm{min}$ of simulation) removed - showing that all simulations except for the steady state (shown in red) are associated with the limit cycle. \textbf{(\textit{d})} Showing simulations as in \textit{\textbf{a}} with the initial $200\ \textrm{min}$ (once the steady state simulation arrived at the steady state) removed to show that while, the the initial conditions might be almost identical and the system will come very close to the steady state, it will always eventually reach the limit cycle (the closer the initial conditions to being identical, the longer it will take for the system to reach the limit cycle; see Supplementary Information).}
+    \label{fig:fig6}
+\end{figure}
+
+\clearpage
 \subsection*{Task 3}
+In previous Tasks, we have examined how the Hill coefficient affects the repression profile, and how the Repressilator produces oscillations. Here, I will demonstrate how the Hill affects the system behaviour. 
+
+When we simulate the Repressilator with all parameters as outlined above, except for setting the Hill coefficient to a sub-critical level ($\lessapprox 1.64$; see Fig.\ref{fig:fig9}) for the Hopf bifurcation to arise ($n = 1.3$), the system will not produce oscillations, but will rather settle at a steady state ($P_{\textrm{\tiny ALL}} \approxeq 420\ [\textrm{molecules}]$; see Fig. \ref{fig:fig7}). Extending this approach and simulating over a range of $n$ (see Fig. \ref{fig:fig8}), shows what a drastic effect the Hill coefficient has on the behaviour of the Repressilator. When $n$ becomes super-critical, as $n$ increases, so does the oscillation peak amplitude (see Fig. \ref{fig:fig9}), while the peak-to-peak period is unchanged (data not shown).
+
+\vspace{-3\abovedisplayskip}
+\begin{figure}
+    \singlespacing
+    \centering
+    \includegraphics[width=0.75\textwidth]{suplementary_information_and_code/Task3_figure1.png}
+    \caption{\textbf{Repressilator ODE simulation with sub-critical $n$.}}
+    \label{fig:fig7}
+\end{figure}
+
+\begin{figure}
+    \singlespacing
+    \centering
+    \includegraphics[width=\textwidth]{suplementary_information_and_code/Task3_figure2.png}
+    \caption{\textbf{Repressilator ODE simulation over range of $n$.} \textbf{(\textit{a})} With increasing $n$, the system behaviour changes. When $n$ rises above the super-critical level ($\gtrapprox 1.64$; see Fig. \ref{fig:fig9}) and a Hopf bifurcation arises in the system, oscillations emerge. The repressilator was simulated over a biologically relevant range of Hill coefficients, as stipulated above. \textbf{(\textit{b})} Showing simulations as in \textbf{\textit{a}}, but cropped to better illustrate the fine transition from sub- to super-criticial $n$.}
+    \label{fig:fig8}
+\end{figure}
+
+\begin{figure}
+    \singlespacing
+    \centering
+    \includegraphics[width=0.75\textwidth]{suplementary_information_and_code/Task3_figure3.png}
+    \caption{\textbf{Protein peak amplitude in relation to changing $n$.} When $n$ crosses the super-critical level ($\gtrapprox 1.64$), oscillations occur in the system and with increasing $n$, the peak concentration amplitude rises as well (data only for TetR shown, but the relationship of $n$ to peak amplitude is identical for all three Reprresilator genes).}
+    \label{fig:fig9}
+\end{figure}
+
+Additionally, in this section, I will also examine how additional system parameters --- translational efficiency ($k_{p}$; see Fig. \ref{fig:fig10}) and promoter leakiness (${k_{m}}_{0}$; $\alpha_{0}$; see Fig. \ref{fig:fig11}). It can be seen the relationship between the rate of translation and the peak concentration amplitude resembles a $\Gamma$ distribution, with its peak $\approxeq 15$. This can be interpreted as the fact that, too low of an efficiency is not able to produce enough protein before the next oscillation, however, too high of a translational efficiency and the genes expression will be silenced a sufficient amount of mRNA can be produced. In the context of promoter leakiness, the protein amplitude decreases drastically with growing leakiness, and as ${k_{m}}_{0}$ approaches $0.068$, the system seizes to oscillate. This observation can likely be explained by the fact that the background expression of the Repressilator is so high, that other means of the proteins' expression is rendered impossible.
+
+\begin{figure}
+    \singlespacing
+    \centering
+    \includegraphics[width=0.75\textwidth]{suplementary_information_and_code/Task3_figure4.png}
+    \caption{\textbf{Repressilator ODE simulation over range of $k_{p}$.} (data only for TetR shown, but the relationship of $k_{p}$ to peak amplitude is identical for all three Repressilator genes)}
+    \label{fig:fig10}
+\end{figure}
+
+\begin{figure}
+    \singlespacing
+    \centering
+    \includegraphics[width=0.75\textwidth]{suplementary_information_and_code/Task3_figure5.png}
+    \caption{\textbf{Repressilator ODE simulation over range of ${k_{m}}_{0}$.} (data only for TetR shown, but the relationship of ${k_{m}}_{0}$ to peak amplitude is identical for all three Repressilator genes)}
+    \label{fig:fig11}
+\end{figure}
+
+\clearpage
 \subsection*{Task 4}
+After having explored the Repressilator parameter space, 
+
 \subsection*{Task 5}
 \subsection*{Task 6}
 
