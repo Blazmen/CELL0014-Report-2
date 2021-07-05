@@ -220,7 +220,7 @@ Expanding the original ODEs, we arrive at set of equations:
 
 \clearpage
 \subsection*{Task 1}
-Firstly, let us consider a simplified scenario with only two genes out of the three regulatory genes -- \textit{lacI} and \textit{tetR}:
+First, let us consider a simplified scenario with only two genes out of the three regulatory genes -- \textit{lacI} and \textit{tetR}:
 
 \begin{equation*}
     P_{\textrm{lacI}} \dashv P_{\textrm{tetR}}
@@ -342,15 +342,68 @@ After having explored the Repressilator parameter space, let us examine behaviou
     \singlespacing
     \centering
     \includegraphics[width=0.75\textwidth,trim={0 0.1cm 0 1.2cm},clip]{suplementary_information_and_code/Task4_figure1.png}
-    \caption{\textbf{Repressilator ODE simulation with GFP.} The system simulation produces oscillations in protein concentration for both the Repressilator genes and the \textit{gfp}. Notably, GFP minimal amplitude corresponds to the of cI as predicted by the model (both being controlled by a TetR operator). Additionally, it can be seen that the GFP concentration never returns to 0 as it does with the rest of the genes. This is likely due GFP's comparably longer $t_{1/2}$. Colour coding as per Fig. \ref{fig:fig1}.}
+    \caption{\textbf{Repressilator ODE simulation with GFP.} The system simulation produces oscillations in protein concentration for both the Repressilator genes and the \textit{gfp}. Notably, GFP minimal amplitude corresponds to the of cI as predicted by the model (both being controlled by a TetR operator). Additionally, it can be seen that the GFP concentration never returns to 0 as it does with the rest of the genes. This is due GFP's comparably\linebreak longer $t_{1/2}$. Colour coding as per Fig. \ref{fig:fig1}.}
     \label{fig:fig12}
 \end{figure}
 
 \subsection*{Task 5}
+Let us consider options for finer control of the Repressilator. In this section, I introduce IPTG induction and control of the protein degradation rate (e.g. via variable levels of proteases) in the system. This could be useful to gain a finer control over the system and for added potential functionality. 
+
+\subsubsection*{IPTG Induction}
+IPTG can be used to "\textit{soak}" LacI and thus control the expression levels of \textit{tetR}. To introduce the IPTG induction into the system, we need to modify the ODE describing the production of \textit{tetR} mrNA as follows:
+
+\begin{equation*}
+    \partial^{+}m_{\textrm{\textit{tetR}}}({\scriptstyle t,\ t+1})\ =\ k_{m}\frac{K^{n}}{K^{n}+(\textcolor{red}{X}*{P_{\textrm{LacI}}({\scriptstyle t})}^{n})}+{k_{m}}_{0}
+\end{equation*}
+
+\noindent where $X$ represents the proportion of available LacI not-bound to IPTG (i.e. IPTG concentration). Simulating this system with different concentrations of IPTG lends us insight into how it affects the Repressilator. With rising levels of IPTG (see Fig. \ref{fig:fig13} and \ref{fig:fig14}), we can see both amplitude and frequency of TetR oscillations plummet and eventually reach a steady state ($P_{\textrm{TetR}} \approxeq 9000\ [\textrm{molecules}]$) as we remove any affect of LacI onto the \textit{tetR} promoter with saturating levels of IPTG.
+
+\begin{figure}
+    \singlespacing
+    \centering
+    \includegraphics[width=1\textwidth,trim={1.5cm 0 1.5cm 0},clip]{suplementary_information_and_code/Task5_figure1.png}
+    \caption{\textbf{Repressilator ODE simulation over a range of IPTG concentrations.} \textbf{(\textit{a})} Overlay of Repressilator simulations at different IPTG concentrations. \textbf{(\textit{b})} Showing a selection of simulations as in \textbf{\textit{a}} to better show the effect of lower IPTG concentrations on the Repressilator.}
+    \label{fig:fig13}
+\end{figure}
+
+\begin{figure}[h]
+    \singlespacing
+    \centering
+    \includegraphics[width=1\textwidth,trim={1.5cm 0 1.5cm 0},clip]{suplementary_information_and_code/Task5_figure2.png}
+    \caption{\textbf{Repressilator protein oscillatory period and amplitude over a range of IPTG concentrations.}}
+    \label{fig:fig14}
+\end{figure}
+
+\subsubsection*{Protein Degradation Rate}
+To introduce the protein degradation rate modulation into the system, we need to modify the ODE describing protein degradation as follows:
+
+\begin{equation*}
+    \partial^{-}P_{i}({\scriptstyle t,\ t+1})\ =\ \textcolor{red}{Y}*k_{dp}*{P_{i}({\scriptstyle t})}
+    \hspace{0.8cm}
+    \big(i\ =\ \textrm{\textit{lacI}, \textit{tetR}, \textit{cI}}\big)
+\end{equation*}
+
+\noindent where $Y$ represents the repression modulation factor ($Y = 0.167 \rightarrow {t_{1/2}}_{\textrm{P}} = 60\ [\textrm{min}]$, $Y = 5 \rightarrow {t_{1/2}}_{\textrm{P}} = 2\ [\textrm{min}]$). From the simulation results (see Fig. \ref{fig:fig15} and \ref{fig:fig16}), we can infer that while protein degradation does not affect the final oscillation period (while it critically affects how much time is it going to take the system until it reaches the limit cycle), it certainly affects the oscillation amplitude --- after a short period of the system reaching its maximum amplitude, the quicker the protein degradation the lower the amplitude, as not enough protein is able to build up before it gene expression is silenced.
+
+\begin{figure}
+    \singlespacing
+    \centering
+    \includegraphics[width=0.75\textwidth]{suplementary_information_and_code/Task5_figure3.png}
+    \caption{\textbf{Repressilator ODE simulation over a range of $Y$ levels.}}
+    \label{fig:fig15}
+\end{figure}
+
+\begin{figure}
+    \singlespacing
+    \centering
+    \includegraphics[width=1\textwidth,trim={1.5cm 0 1.5cm 0},clip]{suplementary_information_and_code/Task5_figure4.png}
+    \caption{\textbf{Repressilator protein oscillatory period and amplitude over a range of $Y$ levels.}}
+    \label{fig:fig16}
+\end{figure}
+
+\clearpage
 \subsection*{Task 6}
-
 \section*{Discussion}
-
 
 %
 \clearpage
