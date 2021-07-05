@@ -261,9 +261,10 @@ In addition to the limit cycle oscillations, the system can also enter a steady 
 \end{figure}
 
 \begin{figure}
-    \singlespacing
     \centering
-    \includegraphics[width=0.95\textwidth]{suplementary_information_and_code/Task2_figure3.png}
+    \singlespacing
+    \noindent\makebox[\textwidth]{
+        \includegraphics[width=18cm, trim={2cm 2cm 2cm 3.5cm},clip]{suplementary_information_and_code/Task2_figure3.png}}
     \caption{\textbf{Repressilator ODE Phase plot.} This plot is showing the relation of TetR and LacI concentrations, nevertheless, the system comprises of 3 genes. To be able to completely understand the system behaviour, a 3D representation is required (See Supplementary Information). \textbf{(\textit{a})} Repressilator simulations ($t_{\textrm{\tiny MAX}}=1000\ \textrm{min} $) with different starting protein concentrations are shown (all mRNA concentrations $= 0$). Regardless the starting conditions (unless they are on the limit cycle), the system will promptly colapse close near the steady state and, unless started with all concentrations identical (in which case the system will enter the steady state), the system will start approaching the limit cycle. The steady state simulation is shown in red; its linear trajectory represents the system behaviour in Fig. \ref{fig:fig5} where the protein concentrations reach the steady state after a short period of transient rise and fall, with all concentrations being identical. \textbf{(\textit{b})} Showing simulations as in \textit{\textbf{a}}, but cropped to better show the steady state a identical simulation approaches to the limit cycle. \textbf{(\textit{c})} Showing simulations as in \textit{\textbf{a}} with the initial transient behaviour (first $800\ \textrm{min}$ of simulation) removed - showing that all simulations except for the steady state (shown in red) are associated with the limit cycle. \textbf{(\textit{d})} Showing simulations as in \textit{\textbf{a}} with the initial $200\ \textrm{min}$ (once the steady state simulation arrived at the steady state) removed to show that while, the the initial conditions might be almost identical and the system will come very close to the steady state, it will always eventually reach the limit cycle (the closer the initial conditions to being identical, the longer it will take for the system to reach the limit cycle; see Supplementary Information).}
     \label{fig:fig6}
 \end{figure}
@@ -287,7 +288,7 @@ When we simulate the Repressilator with all parameters as outlined above, except
     \singlespacing
     \centering
     \includegraphics[width=\textwidth]{suplementary_information_and_code/Task3_figure2.png}
-    \caption{\textbf{Repressilator ODE simulation over range of $n$.} \textbf{(\textit{a})} With increasing $n$, the system behaviour changes. When $n$ rises above the super-critical level ($\gtrapprox 1.64$; see Fig. \ref{fig:fig9}) and a Hopf bifurcation arises in the system, oscillations emerge. The repressilator was simulated over a biologically relevant range of Hill coefficients, as stipulated above. \textbf{(\textit{b})} Showing simulations as in \textbf{\textit{a}}, but cropped to better illustrate the fine transition from sub- to super-criticial $n$.}
+    \caption{\textbf{Repressilator ODE simulation over range of $n$.} \textbf{(\textit{a})} With increasing $n$, the system behaviour changes. When $n$ rises above the super-critical level ($\gtrapprox 1.64$; see Fig. \ref{fig:fig9}) and a Hopf bifurcation arises in the system, oscillations emerge. The repressilator was simulated over a biologically relevant range of Hill coefficients, as stipulated above. \textbf{(\textit{b})} Showing simulations as in \textbf{\textit{a}}, but cropped to better illustrate the fine transition from sub- to super-critical $n$.}
     \label{fig:fig8}
 \end{figure}
 
@@ -295,17 +296,17 @@ When we simulate the Repressilator with all parameters as outlined above, except
     \singlespacing
     \centering
     \includegraphics[width=0.75\textwidth]{suplementary_information_and_code/Task3_figure3.png}
-    \caption{\textbf{Protein peak amplitude in relation to changing $n$.} When $n$ crosses the super-critical level ($\gtrapprox 1.64$), oscillations occur in the system and with increasing $n$, the peak concentration amplitude rises as well (data only for TetR shown, but the relationship of $n$ to peak amplitude is identical for all three Reprresilator genes).}
+    \caption{\textbf{Protein peak amplitude in relation to changing $n$.} When $n$ crosses the super-critical level ($\gtrapprox 1.64$), oscillations occur in the system and with increasing $n$, the peak concentration amplitude rises as well (data only for TetR shown, but the relationship of $n$ to peak amplitude is identical for all three Repressilator genes).}
     \label{fig:fig9}
 \end{figure}
 
-Additionally, in this section, I will also examine how additional system parameters --- translational efficiency ($k_{p}$; see Fig. \ref{fig:fig10}) and promoter leakiness (${k_{m}}_{0}$; $\alpha_{0}$; see Fig. \ref{fig:fig11}). It can be seen the relationship between the rate of translation and the peak concentration amplitude resembles a $\Gamma$ distribution, with its peak $\approxeq 15$. This can be interpreted as the fact that, too low of an efficiency is not able to produce enough protein before the next oscillation, however, too high of a translational efficiency and the genes expression will be silenced a sufficient amount of mRNA can be produced. In the context of promoter leakiness, the protein amplitude decreases drastically with growing leakiness, and as ${k_{m}}_{0}$ approaches $0.068$, the system seizes to oscillate. This observation can likely be explained by the fact that the background expression of the Repressilator is so high, that other means of the proteins' expression is rendered impossible.
+Additionally, in this section, I will also examine how additional system parameters --- translational efficiency ($k_{p}$; see Fig. \ref{fig:fig10}) and promoter leakiness (${k_{m}}_{0}$; $\alpha_{0}$; see Fig. \ref{fig:fig11}). It can be seen the relationship between the rate of translation and the peak concentration amplitude resembles a $\Gamma$ distribution, with its peak $\approxeq 12$. This can be interpreted as the fact that, too low of an efficiency is not able to produce enough protein before the next oscillation, however, too high of a translational efficiency and the genes expression will be silenced a sufficient amount of mRNA can be produced. In the context of promoter leakiness, the protein amplitude decreases drastically with growing leakiness, and as ${k_{m}}_{0}$ approaches $0.068$, the system seizes to oscillate. This observation can likely be explained by the fact that the background expression of the Repressilator is so high, that the promoters are constantly under saturating levels of repressors.
 
 \begin{figure}
     \singlespacing
     \centering
     \includegraphics[width=0.75\textwidth]{suplementary_information_and_code/Task3_figure4.png}
-    \caption{\textbf{Repressilator ODE simulation over range of $k_{p}$.} (data only for TetR shown, but the relationship of $k_{p}$ to peak amplitude is identical for all three Repressilator genes)}
+    \caption{\textbf{Repressilator ODE simulation over range of $k_{p}$.} Data only for TetR shown, but the relationship of $k_{p}$ to peak amplitude is identical for all three Repressilator genes.}
     \label{fig:fig10}
 \end{figure}
 
@@ -313,13 +314,37 @@ Additionally, in this section, I will also examine how additional system paramet
     \singlespacing
     \centering
     \includegraphics[width=0.75\textwidth]{suplementary_information_and_code/Task3_figure5.png}
-    \caption{\textbf{Repressilator ODE simulation over range of ${k_{m}}_{0}$.} (data only for TetR shown, but the relationship of ${k_{m}}_{0}$ to peak amplitude is identical for all three Repressilator genes)}
+    \caption{\textbf{Repressilator ODE simulation over range of ${k_{m}}_{0}$.} Data only for TetR shown, but the relationship of ${k_{m}}_{0}$ to peak amplitude is identical for all three Repressilator genes.}
     \label{fig:fig11}
 \end{figure}
 
 \clearpage
 \subsection*{Task 4}
-After having explored the Repressilator parameter space, 
+After having explored the Repressilator parameter space, let us examine behaviour of the system when we include the expression of GFP as controlled on the Reporter. This requires the addition of two differential equations into our system --- $m_{\textrm{\textit{gfp}}}$ and $P_{\textrm{GFP}}$:
+
+\begin{equation*}
+    \begin{aligned}
+        \partial^{+}m_{\textrm{\textit{gfp}}}({\scriptstyle t,\ t+1})\ =\ k_{m}\frac{K^{n}}{K^{n}+{P_{\textrm{TetR}}({\scriptstyle t})}^{n}}+{k_{m}}_{0} \\[0.1cm]
+        \partial^{+}P_{\textrm{GFP}}({\scriptstyle t,\ t+1})\ =\ k_{p}*{m_{\textrm{\textit{gfp}}}({\scriptstyle t})} \\[0.2cm]
+        \partial^{-}m_{\textrm{\textit{gfp}}}({\scriptstyle t,\ t+1})\ =\ k_{dm}*{m_{\textrm{\textit{gfp}}}({\scriptstyle t})} \\[0.1cm]
+        \partial^{-}P_{\textrm{GFP}}({\scriptstyle t,\ t+1})\ =\ {k_{dp}}_{\textrm{GFP}}*{P_{\textrm{GFP}}({\scriptstyle t})} \\[0.3cm]
+        \Delta m_{\textrm{\textit{gfp}}}({\scriptstyle t,\ t+1})\ =\ \partial^{+}m_{\textrm{\textit{gfp}}}({\scriptstyle t,\ t+1})\ -\ \partial^{-}m_{\textrm{\textit{gfp}}}({\scriptstyle t,\ t+1}) \\[0.1cm]
+        \Delta P_{\textrm{GFP}}({\scriptstyle t,\ t+1})\ =\ \partial^{+}P_{\textrm{GFP}}({\scriptstyle t,\ t+1})\ -\ \partial^{-}P_{\textrm{GFP}}({\scriptstyle t,\ t+1}) \\[0.3cm]
+        m_{\textrm{\textit{gfp}}}({\scriptstyle t+1})\ =\ m_{\textrm{\textit{gfp}}}({\scriptstyle t}) + \Delta m_{\textrm{\textit{gfp}}}({\scriptstyle t,\ t+1}) \\[0.1cm]
+        P_{\textrm{GFP}}({\scriptstyle t+1})\ =\ P_{\textrm{GFP}}({\scriptstyle t}) + \Delta P_{\textrm{GFP}}({\scriptstyle t,\ t+1})\textrm{\large{,}}
+    \end{aligned}
+\end{equation*}
+
+\noindent where all parameters are identical as outlined above except for GFP $t_{1/2} = 60\ [\textrm{min}]$\linebreak (${k_{dp}}_{\textrm{GFP}} = 0.01155\ [\textrm{min}^{-1}]$) to reflect its lower degradation rate compared to the Repressilator proteins. The simulation (see Fig. \ref{fig:fig12}) shows results comparable with those seen originally by Elowitz and Leibier\cite{Elowitz2000d}.
+
+\vspace{-2.2\abovedisplayskip}
+\begin{figure}[H]
+    \singlespacing
+    \centering
+    \includegraphics[width=0.75\textwidth,trim={0 0.1cm 0 1.2cm},clip]{suplementary_information_and_code/Task4_figure1.png}
+    \caption{\textbf{Repressilator ODE simulation with GFP.} The system simulation produces oscillations in protein concentration for both the Repressilator genes and the \textit{gfp}. Notably, GFP minimal amplitude corresponds to the of cI as predicted by the model (both being controlled by a TetR operator). Additionally, it can be seen that the GFP concentration never returns to 0 as it does with the rest of the genes. This is likely due GFP's comparably longer $t_{1/2}$. Colour coding as per Fig. \ref{fig:fig1}.}
+    \label{fig:fig12}
+\end{figure}
 
 \subsection*{Task 5}
 \subsection*{Task 6}
