@@ -1,0 +1,9 @@
+This project is a submission by candidate "LRMV8" as "Report 2" for the CELL0014 (Dynamic Biological Systems) UCL module of 2020/2021
+
+It contains the following files:
+  - fig (contains figures adopted from other publications)
+  - ref (contains bibliography and citation style)
+  - main.tex (latex manuscript of the report)
+  - LRMV8_CELL0014_Report2.pdf (report itself in .pdf)
+  - supplementary_information_and_code (contains figures and python jupyter notebooks used to analyse the Repressilator in this report)
+      - repressilator_output.npz (stochastic simulations of the Repressilator used to generate the Monte-Carlo approximation of peak height and period)
