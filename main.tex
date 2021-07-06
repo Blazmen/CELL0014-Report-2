@@ -93,7 +93,7 @@ Extending the Goodwin Oscillator are repressilators --- cyclical sets of one or 
     \singlespacing
     \centering
     \includegraphics[width=0.95\textwidth]{fig/Repressilator_plasmid.png}
-    \caption{\textbf{Repressilator Design.} The Repressilator is composed of three regulatory genes,\linebreak \textit{lacI}, \textit{cI}, and \textit{tetR}, under the control of the P\textsubscript{R} promoter with the cI operator, the P\textsubscript{L} promoter with the TetR operator, and the P\textsubscript{L} promoter with the LacI operator, respectively. The genes are terminated with proteolysis targeting tags (as denoted by the "\textit{lite}" suffix). In addition\linebreak to the Repressilator, the system also includes the Reporter carrying the intermediate-stability GFP (\textit{gfp-avv}) under the control of the P\textsubscript{L}tetO1 promoter allowing to monitor the system state with fluorescent microscopy \textit{in vivo}. The plasmids are equipped with the low-copy pSC101 and the high-copy ColE1 \textit{E. coli} replication origins, and ampicillin and kanamycin resistance genes (allowing to select for cell containing only both plasmids), respectively. T1 terminators from\linebreak the \textit{E. coli rrnB} operon used to isolate the individual open reading frames are shown as black boxes. Gene network diagrams are displayed to illustrate the oscillatory negative-feedback loop circuit. Adapted from Elowitz \& Leibier (2000)\cite{Elowitz2000d}.}
+    \caption{\textbf{Repressilator design.} The Repressilator is composed of three regulatory genes,\linebreak \textit{lacI}, \textit{cI}, and \textit{tetR}, under the control of the P\textsubscript{R} promoter with the cI operator, the P\textsubscript{L} promoter with the TetR operator, and the P\textsubscript{L} promoter with the LacI operator, respectively. The genes are terminated with proteolysis targeting tags (as denoted by the "\textit{lite}" suffix). In addition\linebreak to the Repressilator, the system also includes the Reporter carrying the intermediate-stability GFP (\textit{gfp-avv}) under the control of the P\textsubscript{L}tetO1 promoter allowing to monitor the system state with fluorescent microscopy \textit{in vivo}. The plasmids are equipped with the low-copy pSC101 and the high-copy ColE1 \textit{E. coli} replication origins, and ampicillin and kanamycin resistance genes (allowing to select for cell containing only both plasmids), respectively. T1 terminators from\linebreak the \textit{E. coli rrnB} operon used to isolate the individual open reading frames are shown as black boxes. Gene network diagrams are displayed to illustrate the oscillatory negative-feedback loop circuit. Adapted from Elowitz \& Leibier (2000)\cite{Elowitz2000d}.}
     \label{fig:fig1}
 \end{figure}
 
@@ -356,7 +356,7 @@ IPTG can be used to "\textit{soak}" LacI and thus control the expression levels 
     \partial^{+}m_{\textrm{\textit{tetR}}}({\scriptstyle t,\ t+1})\ =\ k_{m}\frac{K^{n}}{K^{n}+(\textcolor{red}{X}*{P_{\textrm{LacI}}({\scriptstyle t})}^{n})}+{k_{m}}_{0}
 \end{equation*}
 
-\noindent where $X$ represents the proportion of available LacI not-bound to IPTG (i.e. IPTG concentration). Simulating this system with different concentrations of IPTG lends us insight into how it affects the Repressilator. With rising levels of IPTG (see Fig. \ref{fig:fig13} and \ref{fig:fig14}), we can see both amplitude and frequency of TetR oscillations plummet and eventually reach a steady state ($P_{\textrm{TetR}} \approxeq 9000\ [\textrm{molecules}]$) as we remove any affect of LacI onto the \textit{tetR} promoter with saturating levels of IPTG.
+\noindent where $X$ represents the proportion of available LacI not-bound to IPTG (i.e. IPTG concentration). Simulating this system with different concentrations of IPTG lends us insight into how it affects the Repressilator. With rising levels of IPTG (see Fig. \ref{fig:fig13} and \ref{fig:fig14}), we can see both amplitude and frequency of TetR oscillations plummet and eventually reach a steady state ($T \approxeq 125\ [\textrm{min}];\ P_{\textrm{TetR}} \approxeq 9000\ [\textrm{molecules}]$) as we remove any affect of LacI onto the \textit{tetR} promoter with saturating levels of IPTG.
 
 \begin{figure}
     \singlespacing
@@ -366,11 +366,11 @@ IPTG can be used to "\textit{soak}" LacI and thus control the expression levels 
     \label{fig:fig13}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \singlespacing
     \centering
     \includegraphics[width=1\textwidth,trim={1.5cm 0 1.5cm 0},clip]{suplementary_information_and_code/Task5_figure2.png}
-    \caption{\textbf{Repressilator protein oscillatory period and amplitude over a range of IPTG concentrations.}}
+    \caption{\textbf{Repressilator protein oscillatory period and amplitude over a range of IPTG concentrations.} $t_{\textrm{\tiny MAX}} = 10 000\ [\textrm{min}]$. (\textit{left} is staggered due to an imperfect period sampling)}
     \label{fig:fig14}
 \end{figure}
 
@@ -383,7 +383,7 @@ To introduce the protein degradation rate modulation into the system, we need to
     \big(i\ =\ \textrm{\textit{lacI}, \textit{tetR}, \textit{cI}}\big)
 \end{equation*}
 
-\noindent where $Y$ represents the repression modulation factor ($Y = 0.167 \rightarrow {t_{1/2}}_{\textrm{P}} = 60\ [\textrm{min}]$, $Y = 5 \rightarrow {t_{1/2}}_{\textrm{P}} = 2\ [\textrm{min}]$). From the simulation results (see Fig. \ref{fig:fig15} and \ref{fig:fig16}), we can infer that while protein degradation does not affect the final oscillation period (while it critically affects how much time is it going to take the system until it reaches the limit cycle), it certainly affects the oscillation amplitude --- after a short period of the system reaching its maximum amplitude, the quicker the protein degradation the lower the amplitude, as not enough protein is able to build up before it gene expression is silenced.
+\noindent where $Y$ represents the repression modulation factor ($Y = 0.167 \rightarrow {t_{1/2}}_{\textrm{P}} = 60\ [\textrm{min}]$, $Y = 5 \rightarrow {t_{1/2}}_{\textrm{P}} = 2\ [\textrm{min}]$). From the simulation results (see Fig. \ref{fig:fig15} and \ref{fig:fig16}), we can infer that while protein degradation does not affect the final oscillation period (however, it critically affects how much time is it going to take the system until it reaches the limit cycle), it certainly affects the oscillation amplitude --- after a short period of the system reaching its maximum amplitude, the quicker the protein degradation the lower the amplitude, as not enough protein is able to build up before it gene expression is silenced.
 
 \begin{figure}
     \singlespacing
@@ -397,12 +397,43 @@ To introduce the protein degradation rate modulation into the system, we need to
     \singlespacing
     \centering
     \includegraphics[width=1\textwidth,trim={1.5cm 0 1.5cm 0},clip]{suplementary_information_and_code/Task5_figure4.png}
-    \caption{\textbf{Repressilator protein oscillatory period and amplitude over a range of $Y$ levels.}}
+    \caption{\textbf{Repressilator protein oscillatory period and amplitude over a range of $Y$ levels.} $t_{\textrm{\tiny MAX}} = 10 000\ [\textrm{min}]$.}
     \label{fig:fig16}
 \end{figure}
 
 \clearpage
 \subsection*{Task 6}
+Until now, I have explored the Repressilator using only deterministic ODE simulations. Sadly, however, the nature of living organisms is far from deterministic. Stochastic fluctuations, which can critically influence the behaviour of the system, need to be accounted for and expected. Therefore, we will now model the Repressilator using the stochastic Gillespie algorithm (see Supplementary Information).
+
+Simulating the Repressilator in this fashion results in the proteins' concentration oscillating with variable amplitude and period (see Fig. \ref{fig:fig17}), consistently with results reported by Elowitz and Leibier\cite{Elowitz2000d}.
+
+\begin{figure}
+    \singlespacing
+    \centering
+    \includegraphics[width=0.75\textwidth]{suplementary_information_and_code/Task6_figure1.png}
+    \caption{\textbf{Repressilator stochastic simulation.} Randomness seed $= 42$. Colour coding as per Fig. \ref{fig:fig1}.}
+    \label{fig:fig17}
+\end{figure}
+
+By overlaying several random simulations of the Repressilator (see Fig. \ref{fig:fig18}), we can see that  the different simulations can drastically differ from one another. To get a better idea of the system behaviour, we can perform \textit{de-facto} Monte-Carlo approximation of the the distributions in peak height and peak-to-peak period (see Fig. \ref{fig:fig19}). Doing so reveals, that the average simulation of the Repressilator behaves very closely to its deterministic alternative, demonstrating that the system can produce oscillations even stochastically driven scenarios (such as an \textit{in vivo} study).
+
+\begin{figure}
+    \singlespacing
+    \centering
+    \includegraphics[width=0.75\textwidth]{suplementary_information_and_code/Task6_figure2.png}
+    \caption{\textbf{Multiple Repressilator stochastic simulations.} Multiple stochastic simulations of the Repressilator shown overlaid. Randomness seeds $= 42,\linebreak 6.67408*10^{-11},\ 299792.458,\ 554.984319180,\ 6.02214076*10^{23}]$. Colour coding as per Fig. \ref{fig:fig1}.}
+    \label{fig:fig18}
+\end{figure}
+
+\begin{figure}
+    \singlespacing
+    \centering
+    \includegraphics[width=1\textwidth]{suplementary_information_and_code/Task6_figure3.png}
+    \caption{\textbf{Oscillation period and peak height distributions across stochastic simulations.} Supplied 100 simulations used in this analysis. Mean $\pm\ s.d.$ shown in red ($3221.6 \pm 1370.9\ [\textrm{molecules}], 132.0 \pm 16.1\ [\textrm{min}]$, respectively). For both, peak height and peak-to-peak period, the distribution observed resembles normal distribution -- showing our successful stochastic simulations.}
+    \label{fig:fig19}
+\end{figure}
+
+\clearpage
 \section*{Discussion}
 
 %
